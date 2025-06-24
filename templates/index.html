@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .video-section {
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(252, 182, 159, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .status {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .chat-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .chat-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.assistant {
+            text-align: left;
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .question-input {
+            display: flex;
+            gap: 15px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .quick-questions {
+            margin: 20px 0;
+        }
+
+        .quick-questions h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .quick-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            background: #e9ecef;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .video-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .video-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .message-content {
+                max-width: 95%;
+            }
+
+            .question-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 YouTube Video AI Assistant</h1>
+            <p>Ask questions about any YouTube video and get intelligent answers!</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Video Loading Section -->
+            <div class="video-section">
+                <h2>📺 Load YouTube Video</h2>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="videoUrl" 
+                        class="input-field" 
+                        placeholder="Paste YouTube URL here (e.g., https://www.youtube.com/watch?v=...)"
+                    >
+                    <button id="loadVideoBtn" class="btn btn-primary">Load Video</button>
+                </div>
+                
+                <div id="videoStatus"></div>
+                <div id="videoInfo" style="display: none;"></div>
+            </div>
+
+            <!-- Chat Section -->
+            <div class="chat-section" id="chatSection" style="display: none;">
+                <div class="chat-header">
+                    <h2>💬 Ask Questions</h2>
+                    <p>Ask anything about the loaded video!</p>
+                </div>
+
+                <div class="quick-questions">
+                    <h3>Quick Questions:</h3>
+                    <button class="quick-btn" onclick="askQuickQuestion('Can you summarize this video?')">
+                        📝 Summarize Video
+                    </button>
+                    <button class="quick-btn" onclick="askQuickQuestion('What are the main points discussed?')">
+                        🎯 Main Points
+                    </button>
+                    <button class="quick-btn" onclick="askQuickQuestion('What topics are covered in this video?')">
+                        📚 Topics Covered
+                    </button>
+                    <button class="quick-btn" onclick="askQuickQuestion('Who is the target audience for this video?')">
+                        👥 Target Audience
+                    </button>
+                </div>
+
+                <div class="chat-container" id="chatContainer">
+                    <div class="message assistant">
+                        <div class="message-content">
+                            👋 Hi! I'm ready to answer questions about your video. What would you like to know?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    Processing your question...
+                </div>
+
+                <div class="question-input">
+                    <input 
+                        type="text" 
+                        id="questionInput" 
+                        class="input-field" 
+                        placeholder="Type your question here..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button id="askBtn" class="btn btn-secondary">Ask Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentVideoId = null;
+        let isVideoInitialized = false;
+
+        // DOM elements
+        const videoUrlInput = document.getElementById('videoUrl');
+        const loadVideoBtn = document.getElementById('loadVideoBtn');
+        const videoStatus = document.getElementById('videoStatus');
+        const videoInfo = document.getElementById('videoInfo');
+        const chatSection = document.getElementById('chatSection');
+        const questionInput = document.getElementById('questionInput');
+        const askBtn = document.getElementById('askBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        const loading = document.getElementById('loading');
+
+        // Event listeners
+        loadVideoBtn.addEventListener('click', loadVideo);
+        askBtn.addEventListener('click', askQuestion);
+
+        // Load video function
+        async function loadVideo() {
+            const videoUrl = videoUrlInput.value.trim();
+            
+            if (!videoUrl) {
+                showStatus('Please enter a YouTube URL', 'error');
+                return;
+            }
+
+            if (!videoUrl.includes('youtube.com/watch') && !videoUrl.includes('youtu.be/')) {
+                showStatus('Please enter a valid YouTube URL', 'error');
+                return;
+            }
+
+            setLoadingState(true, loadVideoBtn, 'Loading...');
+            
+            try {
+                const response = await fetch('/get_youtube_video_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        video_id: videoUrl
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentVideoId = data.video_id;
+                    showStatus('✅ Video loaded successfully! You can now ask questions.', 'success');
+                    showVideoInfo(data);
+                    showChatSection();
+                    
+                    // Initialize video in background
+                    initializeVideo();
+                } else {
+                    showStatus(`❌ Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Network error: ${error.message}`, 'error');
+            } finally {
+                setLoadingState(false, loadVideoBtn, 'Load Video');
+            }
+        }
+
+        // Initialize video for faster queries
+        async function initializeVideo() {
+            try {
+                const response = await fetch('/initialize_video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    isVideoInitialized = true;
+                    showStatus('🚀 Video initialized! Questions will be answered faster now.', 'info');
+                }
+            } catch (error) {
+                console.log('Video initialization failed, but queries will still work');
+            }
+        }
+
+        // Ask question function
+        async function askQuestion() {
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                return;
+            }
+
+            if (!currentVideoId) {
+                showStatus('Please load a video first', 'error');
+                return;
+            }
+
+            // Add user message to chat
+            addMessage(question, 'user');
+            questionInput.value = '';
+            
+            // Show loading
+            loading.classList.add('show');
+            setLoadingState(true, askBtn, 'Thinking...');
+
+            try {
+                const response = await fetch('/ask_question', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    addMessage(data.answer, 'assistant');
+                } else {
+                    addMessage(`❌ Error: ${data.error}`, 'assistant');
+                }
+            } catch (error) {
+                addMessage(`❌ Network error: ${error.message}`, 'assistant');
+            } finally {
+                loading.classList.remove('show');
+                setLoadingState(false, askBtn, 'Ask Question');
+            }
+        }
+
+        // Quick question function
+        function askQuickQuestion(question) {
+            questionInput.value = question;
+            askQuestion();
+        }
+
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                askQuestion();
+            }
+        }
+
+        // Add message to chat
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(messageContent);
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            videoStatus.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    videoStatus.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // Show video info
+        function showVideoInfo(data) {
+            videoInfo.innerHTML = `
+                <div class="video-info">
+                    <h3>📹 Video Information</h3>
+                    <p><strong>Video ID:</strong> ${data.video_id}</p>
+                    <p><strong>Status:</strong> ${data.status}</p>
+                    <p>${data.description}</p>
+                </div>
+            `;
+            videoInfo.style.display = 'block';
+        }
+
+        // Show chat section
+        function showChatSection() {
+            chatSection.style.display = 'block';
+            questionInput.focus();
+        }
+
+        // Set loading state for buttons
+        function setLoadingState(isLoading, button, loadingText) {
+            if (isLoading) {
+                button.disabled = true;
+                button.dataset.originalText = button.textContent;
+                button.textContent = loadingText;
+            } else {
+                button.disabled = false;
+                button.textContent = button.dataset.originalText || button.textContent;
+            }
+        }
+
+        // Focus on video URL input when page loads
+        window.addEventListener('load', () => {
+            videoUrlInput.focus();
+        });
+    </script>
+</body>
+</html>
