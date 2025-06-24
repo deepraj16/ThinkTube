@@ -1,9 +1,7 @@
 gunicorn==22.0.0
-
 flask==3.0.3
 flask-cors==4.0.1
 chromadb==0.4.24 
-
 langchain==0.3.25
 langchain-core==0.3.65
 langchain-community==0.3.25
@@ -17,3 +15,4 @@ langchain-text-splitters==0.3.8
 uritemplate==4.1.1
 youtube-transcript-api==0.6.1
 python-dotenv==1.0.1
+numpy<2.0 
