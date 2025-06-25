@@ -6,6 +6,13 @@ from vector_store import setup_embeddings_and_vectorstore
 from indexing import setup_llm, create_document_chunks
 from promt_templtes import create_prompt_template
 
+
+import numpy as np
+if not hasattr(np, 'float_'):
+    np.float_ = np.float64
+if not hasattr(np, 'int_'):
+    np.int_ = np.int64 
+
 def format_docs(retrieved_docs):
     """Format retrieved documents into context text"""
     context_text = "\n\n".join(doc.page_content for doc in retrieved_docs)
