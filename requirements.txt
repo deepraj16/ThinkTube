@@ -3,7 +3,7 @@ flask-cors==4.0.1
 gunicorn==22.0.0
 
 numpy>=2.1.0
-
+protobuf==3.20.3
 # Langchain Ecosystem (latest versions)
 langchain==0.3.25
 langchain-core==0.3.65
