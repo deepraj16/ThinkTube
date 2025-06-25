@@ -4,7 +4,7 @@ flask-cors==4.0.1
 chromadb==0.4.24 
 langchain==0.3.25
 langchain-core==0.3.65
-langchain-community==0.3.25
+langchain-community==0.0.26 
 langchain-openai==0.3.22
 langchain-anthropic==0.3.15
 langchain-google-genai==2.1.5
