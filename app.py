@@ -5,6 +5,9 @@ from urllib.parse import urlparse,parse_qs
 app = Flask(__name__)
 CORS(app)
 
+if not hasattr(np, 'float_'):
+    np.float_ = np.float64
+if not hasattr(np, 'int_'):
 
 def extract_video_id(url):
     parsed_url = urlparse(url)
