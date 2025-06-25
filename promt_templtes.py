@@ -1,5 +1,10 @@
 
 from langchain.prompts import PromptTemplate
+import numpy as np
+if not hasattr(np, 'float_'):
+    np.float_ = np.float64
+if not hasattr(np, 'int_'):
+    np.int_ = np.int64 
 
 def create_prompt_template():
     """Create the prompt template for the RAG system"""
