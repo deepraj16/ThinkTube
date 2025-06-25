@@ -3,6 +3,12 @@ from langchain_community.vectorstores import Chroma
 # from langchain_community.vectorstores import DocArrayInMemorySearch
 # from langchain_community.vectorstores import Qdrant
 from langchain_together import TogetherEmbeddings
+import numpy as np
+if not hasattr(np, 'float_'):
+    np.float_ = np.float64
+if not hasattr(np, 'int_'):
+    np.int_ = np.int64 
+
 
 def setup_embeddings_and_vectorstore(chunks):
     """Setup embeddings and create Chroma vector store"""
