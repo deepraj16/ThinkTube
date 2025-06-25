@@ -1,3 +1,6 @@
+setuptools>=42
+wheel
+
 gunicorn==22.0.0
 flask==3.0.3
 flask-cors==4.0.1
@@ -5,7 +8,7 @@ flask-cors==4.0.1
 # Core compatibility
 numpy==1.24.4
 
-# LangChain ecosystem (working with Python 3.9)
+# LangChain ecosystem (Python 3.9 compatible)
 langchain==0.1.16
 langchain-core==0.1.53
 langchain-community==0.0.26
@@ -17,7 +20,7 @@ langchain-together==0.0.2
 langchain-deepseek==0.0.2
 langchain-text-splitters==0.0.1
 
-# Others
+# Other libs
 chromadb==0.4.24
 youtube-transcript-api==0.6.1
 python-dotenv==1.0.1
