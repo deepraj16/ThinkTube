@@ -1,4 +1,9 @@
 import requests
+import numpy as np
+if not hasattr(np, 'float_'):
+    np.float_ = np.float64
+if not hasattr(np, 'int_'):
+    np.int_ = np.int64 
 
 def get_video_transcript(video_id):
     """Get transcript from YouTube video using RapidAPI"""
