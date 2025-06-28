@@ -12,7 +12,7 @@ if not hasattr(np, 'int_'):
 
 def setup_embeddings_and_vectorstore(chunks):
     """Setup embeddings and create Chroma vector store"""
-    os.environ["OPENAI_API_KEY"] = "2f2c9e25075a8768b707adcff56865283eb487cb962e920fbcc6f432cbb001f7"
+    os.environ["OPENAI_API_KEY"] = "268ac4c5c255e13be7ed21abe9f14e595a748ce1dc5139a10b5523fd2db42f8b"
     os.environ["OPENAI_API_BASE"] = "https://api.together.xyz/v1"
     
     embeddings = TogetherEmbeddings(
