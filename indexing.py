@@ -9,7 +9,7 @@ if not hasattr(np, 'int_'):
 
 def setup_llm():
     """Setup and configure the language model"""
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = "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"
     os.environ["OPENAI_API_BASE"] = "https://api.groq.com/openai/v1"
     
     llm = ChatOpenAI(
