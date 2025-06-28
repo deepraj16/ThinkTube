@@ -10,7 +10,7 @@ def get_video_transcript(video_id):
     if not video_id:
         raise ValueError("Video ID is not provided.")
    
-    api_key = "aa1b4a6932mshbeb683ba4c15e85p1340a8jsn22a230a7d684"
+    api_key = "db20206689msh31654bb5c7cc28fp193765jsnb277f41c56ae"
 
     url = "https://youtube-transcript3.p.rapidapi.com/api/transcript"
     querystring = {"videoId": video_id}
