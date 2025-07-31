@@ -26,5 +26,5 @@ Lind = ( https://thinktube.onrender.com/ )
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/youtube-rag-system.git
+git clone https://github.com/deepraj16/youtube-rag-system.git
 cd youtube-rag-system
